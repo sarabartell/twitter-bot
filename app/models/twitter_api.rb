@@ -1,5 +1,5 @@
 require 'twitter'
-class TwitterApi < ApplicationRecord
+class TwitterApi
 
   def twitter_api_access
     @client = Twitter::REST::Client.new do |config|
