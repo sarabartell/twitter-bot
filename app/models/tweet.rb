@@ -44,10 +44,10 @@ class Tweet < ApplicationRecord
     next_word = ""
     sentence_starters = @dictionary.select {|k,v| k == nil}
     sentence << current_word = sentence_starters[nil].to_a.reject{|word| sentence_end(word)}.sample[0]
-    until sentence_end(current_word)
-      @dictionary.fetch(current_word)
-      next_word = current_word
-    end
+    # until sentence_end(current_word)
+    #   @dictionary.fetch(current_word)
+    #   next_word = current_word
+    # end
     p sentence.join(" ")
   end
 
