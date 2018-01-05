@@ -6,8 +6,8 @@
 <body>
   <h1>Generate a Tweet!!</h1>
   <div>
-    <p>here is where the tweets will go</p>
-    <button>press to make another!</button>
+    <p><%= @tweet %></p>
+    <%= button_to "Make another tweet!", tweet_index_path, :method=> :get%>
   </div>
 </body>
 </html>

@@ -50,19 +50,19 @@ class Tweet < ApplicationRecord
     sentence << current_word = sentence_starters[nil].to_a.reject{|word| sentence_end(word)}.sample[0]
 
     until sentence_end(current_word) == true
-      @dictionary.fetch(current_word)
-      #finds values of the word in dictionary
-      next_word = @dictionary.fetch(current_word).to_a[0][0]
-      #sets next word to that key
+      key_word = @dictionary.fetch(current_word)
+      next_word = key_word.to_a[0][0]
+
       return sentence.join(" ") if next_word == nil
-      #stops and returns sentence if next word is nil
       sentence << next_word
-      #otherwise, shuffles in next word to sentence
       current_word = next_word
-      #resets current word to the next word
-      if @dictionary.fetch(current_word).length > 1
-        sentence << current_word = @dictionary.fetch(current_word).max_by{|k,v| v }[0]
-        #returns the max key by the highest value
+
+      if key_word.length > 1
+        if (key_word.values.uniq == [1]) && (key_word.values.length > 2)
+          sentence << current_word = key_word.to_a.sample[0]
+        else
+          sentence << current_word = key_word.max_by{|k,v| v }[0]
+        end
       end
     end
     p sentence.join(" ")
