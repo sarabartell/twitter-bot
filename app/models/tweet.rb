@@ -44,8 +44,11 @@ class Tweet < ApplicationRecord
   end
 
   def generate_sentence
+    # @dictionary.each do |k,v|
+    #   p "#{k} --> #{v}"
+    # end
+
     sentence = []
-    next_word = ""
     sentence_starters = @dictionary.select {|k,v| k == nil}
     sentence << current_word = sentence_starters[nil].to_a.reject{|word| sentence_end(word)}.sample[0]
 
@@ -54,18 +57,23 @@ class Tweet < ApplicationRecord
       next_word = key_word.to_a[0][0]
 
       return sentence.join(" ") if next_word == nil
-      sentence << next_word
-      current_word = next_word
 
       if key_word.length > 1
-        if (key_word.values.uniq == [1]) && (key_word.values.length > 2)
-          sentence << current_word = key_word.to_a.sample[0]
+        if key_word.values.uniq == [1]
+         next_word = key_word.to_a.sample[0]
         else
-          sentence << current_word = key_word.max_by{|k,v| v }[0]
+          next_word = key_word.max_by{|k,v| v }[0]
         end
+        sentence << next_word
+        current_word = next_word
+
+      elsif key_word.length == 1
+        sentence << next_word
+        current_word = next_word
       end
     end
     p sentence.join(" ")
   end
 
+#last end
 end
