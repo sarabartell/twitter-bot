@@ -1,16 +1,27 @@
 class Tweet < ApplicationRecord
   include TweetHelper
 
-  def self.parse_tweets
+  def parse_tweets
     @tweet_texts = []
-    tweets = $client.user_timeline('rubyinside', count: 10)
+    tweets = $client.user_timeline('NASA', count: 10)
     tweets.each do |tweet|
-      @tweet_texts << tweet.full_text
+      tweet.full_text.split(" ").each do |word|
+        if sentence_end(word)
+          @tweet_texts << word
+          @tweet_texts << nil
+        else
+          @tweet_texts << word
+        end
+      end
     end
     p @tweet_texts
   end
 
-  def generate_tweets(tweet_array)
+  def sentence_end(word)
+    word =~ /^*+[?.!]$/
+  end
+
+  def generate_markov
 
   end
 
