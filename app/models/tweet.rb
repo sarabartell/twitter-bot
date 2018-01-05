@@ -9,13 +9,12 @@ class Tweet < ApplicationRecord
         add_to_markov(word, @all_tweets[i+1])
        end
     end
-    p @dictionary
-    p "******"
+    @dictionary
   end
 
   def parse_tweets
     @tweet_texts = []
-    tweets = $client.user_timeline('ThePeakyBlinder', count: 30)
+    tweets = $client.user_timeline('realDonaldTrump', count: 40)
     tweets.each do |tweet|
       tweet.full_text.split(" ").each do |word|
         if sentence_end(word)
@@ -40,8 +39,16 @@ class Tweet < ApplicationRecord
     @dictionary[word][next_word] += 1
   end
 
-  def generate_sentence(words_hash)
+  def generate_sentence
     sentence = []
+    next_word = ""
+    sentence_starters = @dictionary.select {|k,v| k == nil}
+    sentence << current_word = sentence_starters[nil].to_a.reject{|word| sentence_end(word)}.sample[0]
+    until sentence_end(current_word)
+      @dictionary.fetch(current_word)
+      next_word = current_word
+    end
+    p sentence.join(" ")
   end
 
 end
