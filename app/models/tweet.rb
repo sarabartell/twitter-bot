@@ -1,20 +1,13 @@
 class Tweet < ApplicationRecord
   include TweetHelper
 
-  def initialize
+  def initialize()
     @dictionary = {}
-    @all_tweets = parse_tweets
-    @all_tweets.each_with_index do |word, i|
-      if i <= (@all_tweets.count)
-        add_to_markov(word, @all_tweets[i+1])
-       end
-    end
-    @dictionary
   end
 
-  def parse_tweets
+  def parse_tweets(twitter_handle)
     @tweet_texts = []
-    tweets = $client.user_timeline('realDonaldTrump', count: 40)
+    tweets = $client.user_timeline(twitter_handle, count: 40)
     tweets.each do |tweet|
       tweet.full_text.split(" ").each do |word|
         if sentence_end(word)
@@ -25,7 +18,17 @@ class Tweet < ApplicationRecord
         end
       end
     end
-    @tweet_texts
+    tweets_to_markov(@tweet_texts)
+    generate_sentence
+  end
+
+  def tweets_to_markov(tweets)
+    tweets.each_with_index do |word, i|
+      if i <= (tweets.count)
+        add_to_markov(word, tweets[i+1])
+       end
+    end
+    @dictionary
   end
 
   def sentence_end(word)
@@ -44,10 +47,6 @@ class Tweet < ApplicationRecord
   end
 
   def generate_sentence
-    # @dictionary.each do |k,v|
-    #   p "#{k} --> #{v}"
-    # end
-
     sentence = []
     sentence_starters = @dictionary.select {|k,v| k == nil}
     sentence << current_word = sentence_starters[nil].to_a.reject{|word| sentence_end(word)}.sample[0]
