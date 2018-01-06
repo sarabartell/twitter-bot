@@ -1,16 +1,15 @@
 class TweetController < ApplicationController
-  include TweetHelper
+ include TweetHelper
 
   def index
-    tweets = $client.user_timeline('rubyinside', count: 3)
-    p tweets
-    p "*****"
-    tweets.each do |tweet|
-      p tweet
-       tweet.full_text
+    tweets = Tweet.new
+    @tweet_search = tweets.parse_tweets(twitter_handle_params)
+  end
 
-    end
+  private
 
+  def twitter_handle_params
+    params.permit(:twitter_handle, :controller)
   end
 
 end

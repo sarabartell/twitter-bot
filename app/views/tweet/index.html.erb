@@ -1,2 +1,19 @@
-<h1>Tweet#index</h1>
-<p>Find me in app/views/tweet/index.html.erb</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tweet generator</title>
+</head>
+<body>
+  <h1>Generate a Tweet!!</h1>
+  <div>
+    <p>Who do you want to generate a tweet from?</p>
+    <%= form_tag("/tweet/index", method: "get") do %>
+      <%= label_tag(:twitter_handle, "Generate for:") %>
+      <%= text_field_tag(:twitter_handle) %>
+      <%= submit_tag("make a tweet!!") %>
+    <% end %>
+    <p>Result:</p>
+    <p><%= @tweet_search %></p>
+  </div>
+</body>
+</html>
