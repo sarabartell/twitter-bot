@@ -8,6 +8,8 @@ class Tweet < ApplicationRecord
 
   def parse_tweets(params)
     twitter_handle = params["twitter_handle"]
+    twitter_handle = 'realDonaldTrump' if (twitter_handle == nil || twitter_handle == "")
+
     @tweet_texts = []
       tweets = $client.user_timeline(twitter_handle, count: 40)
       tweets.each do |tweet|
