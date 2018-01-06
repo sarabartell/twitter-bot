@@ -6,18 +6,13 @@ describe TweetController do
   describe "GET #index" do
     it "returns http success" do
       get :index
-      expect(response).to have_http_status 200
+      expect(response).to have_http_status(:success)
     end
 
-    it "assigns tweets to @tweets" do
+    it "redirects to index page" do
       get :index
-      expect(assigns(:tweets)).to eq(@tweets)
-    end
-
-    it "generates an array of 10 tweets" do
-      expect(@tweets.length).to eq(40)
+      expect(response).to redirect_to tweet_index_path
     end
   end
-
 
 end

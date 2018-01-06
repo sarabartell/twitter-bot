@@ -7,8 +7,13 @@
   <h1>Generate a Tweet!!</h1>
   <div>
     <p>Who do you want to generate a tweet from?</p>
-    <p><%= @tweet %></p>
-    <%= button_to "Make another tweet!", tweet_index_path, :method=> :get%>
+    <%= form_tag("/tweet/index", method: "get") do %>
+      <%= label_tag(:twitter_handle, "Generate for:") %>
+      <%= text_field_tag(:twitter_handle) %>
+      <%= submit_tag("make a tweet!!") %>
+    <% end %>
+    <p>Result:</p>
+    <p><%= @tweet_search %></p>
   </div>
 </body>
 </html>

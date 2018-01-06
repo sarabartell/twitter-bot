@@ -1,25 +1,27 @@
 class Tweet < ApplicationRecord
   include TweetHelper
+  attr_reader :dictionary
 
   def initialize()
     @dictionary = {}
   end
 
-  def parse_tweets(twitter_handle)
+  def parse_tweets(params)
+    twitter_handle = params["twitter_handle"]
     @tweet_texts = []
-    tweets = $client.user_timeline(twitter_handle, count: 40)
-    tweets.each do |tweet|
-      tweet.full_text.split(" ").each do |word|
-        if sentence_end(word)
-          @tweet_texts << word
-          @tweet_texts << nil
-        else
-          @tweet_texts << word
+      tweets = $client.user_timeline(twitter_handle, count: 40)
+      tweets.each do |tweet|
+        tweet.full_text.split(" ").each do |word|
+          if sentence_end(word)
+            @tweet_texts << word
+            @tweet_texts << nil
+          else
+            @tweet_texts << word
+          end
         end
       end
-    end
-    tweets_to_markov(@tweet_texts)
-    generate_sentence
+      tweets_to_markov(@tweet_texts)
+      generate_sentence
   end
 
   def tweets_to_markov(tweets)
@@ -44,6 +46,7 @@ class Tweet < ApplicationRecord
       @dictionary[word] = Hash.new(0)
     end
     @dictionary[word][next_word] += 1
+    @dictionary
   end
 
   def generate_sentence
